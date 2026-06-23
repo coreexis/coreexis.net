@@ -8,18 +8,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome untuk Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts - Syncopate & Inter untuk Premium Tech Feel -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --cx-bg: #06070b;
+            --cx-bg: #040508;
             --cx-accent-primary: #00f2fe;
             --cx-accent-secondary: #7f00ff;
-            --cx-card-glow: rgba(0, 242, 254, 0.03);
-            --cx-border: rgba(255, 255, 255, 0.07);
+            --cx-border: rgba(255, 255, 255, 0.08);
             --cx-text-main: #f8fafc;
             --cx-text-muted: #64748b;
         }
@@ -39,35 +38,22 @@
             position: relative;
         }
 
-        /* Interactive Particle Canvas Background */
+        /* Canvas Latar Belakang - Diatur agar Interaktif Sepenuhnya */
         #cx-space-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
-            pointer-events: none;
+            z-index: 2; /* Berada di atas background, di bawah teks utama */
+            pointer-events: auto; /* Harus auto agar mendeteksi mouse/sentuhan */
         }
 
-        /* Ambient Glow Orbs di Pojok */
-        .cx-glow-orb-1 {
+        .cx-glow-orb {
             position: absolute;
-            width: 250px;
-            height: 250px;
-            top: -5%;
-            left: -5%;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, rgba(0,0,0,0) 70%);
-            z-index: 1;
-            pointer-events: none;
-        }
-        .cx-glow-orb-2 {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            bottom: -5%;
-            right: -5%;
-            background: radial-gradient(circle, rgba(127, 0, 255, 0.08) 0%, rgba(0,0,0,0) 70%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.06) 0%, rgba(0,0,0,0) 70%);
             z-index: 1;
             pointer-events: none;
         }
@@ -75,24 +61,35 @@
         /* Hero Wrapper */
         .cx-wrapper-hero {
             position: relative;
-            z-index: 10;
+            z-index: 3; /* Teks berada di atas canvas interaktif */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 60px 16px;
+            pointer-events: none; /* Supaya klik/sentuhan menembus ke canvas di bawahnya */
+        }
+
+        /* Semua elemen dalam hero diaktifkan kembali pointer-eventsnya agar bisa diklik/input */
+        .cx-interactive-content {
+            pointer-events: auto;
+            width: 100%;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: cxFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         /* Status Badge */
         .cx-status-badge {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--cx-border);
             padding: 6px 14px;
             border-radius: 100px;
             font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             font-weight: 600;
             color: #ffffff;
             display: inline-flex;
@@ -100,10 +97,11 @@
             gap: 8px;
             margin-bottom: 1.5rem;
             backdrop-filter: blur(10px);
-            transition: border-color 0.4s ease;
+            transition: all 0.3s ease;
         }
         .cx-status-badge:hover {
             border-color: var(--cx-accent-primary);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
         }
         .cx-badge-pulse {
             width: 6px;
@@ -117,13 +115,13 @@
         /* Typography */
         .cx-main-title {
             font-family: 'Syncopate', sans-serif;
-            font-size: clamp(1.8rem, 7vw, 4.5rem);
+            font-size: clamp(1.8rem, 7vw, 4.2rem);
             font-weight: 700;
             text-transform: lowercase;
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
             line-height: 1.1;
             margin-bottom: 1.25rem;
-            background: linear-gradient(180deg, #ffffff 0%, #a5b4fc 100%);
+            background: linear-gradient(180deg, #ffffff 40%, #a5b4fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -139,41 +137,28 @@
             max-width: 540px;
             margin: 0 auto 2.5rem auto;
             line-height: 1.5;
-            font-weight: 400;
-            padding: 0 10px;
         }
 
-        /* Countdown Glassmorphism Grid */
+        /* Countdown Cards */
         .cx-countdown-grid {
             display: flex;
             gap: 12px;
             justify-content: center;
             margin-bottom: 2.5rem;
-            width: 100%;
-            max-width: 480px;
         }
         .cx-timer-block {
             flex: 1;
-            background: rgba(255, 255, 255, 0.01);
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--cx-border);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 16px 8px;
             backdrop-filter: blur(20px);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .cx-timer-block::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%);
-            pointer-events: none;
         }
         .cx-timer-block:hover {
-            transform: translateY(-3px);
-            border-color: rgba(0, 242, 254, 0.25);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4), 0 0 15px var(--cx-card-glow);
+            transform: scale(1.05);
+            border-color: var(--cx-accent-primary);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);
         }
         .cx-num-display {
             font-family: 'Syncopate', sans-serif;
@@ -189,25 +174,24 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--cx-text-muted);
-            font-weight: 500;
         }
 
-        /* Capsule Form Input */
+        /* Form Input */
         .cx-form-container {
             width: 100%;
             max-width: 500px;
-            background: rgba(10, 11, 18, 0.6);
+            background: rgba(10, 11, 18, 0.7);
             border: 1px solid var(--cx-border);
             padding: 6px;
             border-radius: 100px;
             backdrop-filter: blur(30px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             transition: all 0.4s ease;
             margin-bottom: 3.5rem;
         }
         .cx-form-container:focus-within {
             border-color: var(--cx-accent-primary);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 20px rgba(0, 242, 254, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 25px rgba(0, 242, 254, 0.2);
         }
         .cx-input-box {
             background: transparent !important;
@@ -240,91 +224,69 @@
         }
         .cx-action-btn:hover {
             background: var(--cx-accent-primary);
-            color: #000000;
-            transform: scale(1.02);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            transform: translateY(-1px);
         }
 
-        /* Banner Feedback System */
+        /* Response Banner */
         .cx-message-banner {
             font-size: 0.85rem;
             margin-top: -2.5rem;
             margin-bottom: 2.5rem;
             transition: all 0.3s ease;
             opacity: 0;
-            transform: translateY(10px);
+            display: none;
         }
         .cx-message-banner.active {
             opacity: 1;
-            transform: translateY(0);
+            display: block;
         }
 
-        /* Social Links */
+        /* Social Icons */
         .cx-social-row {
             display: flex;
             gap: 20px;
         }
         .cx-icon-link {
             color: var(--cx-text-muted);
-            font-size: 1rem;
+            font-size: 1.1rem;
             text-decoration: none;
             transition: all 0.3s ease;
         }
         .cx-icon-link:hover {
-            color: #ffffff;
-            transform: translateY(-2px);
+            color: var(--cx-accent-primary);
+            transform: translateY(-3px);
         }
 
-        /* Pulse Animations */
+        /* Keyframes */
+        @keyframes cxFadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
         @keyframes cxPulseGlow {
             0% { transform: scale(0.9); opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.5); }
             70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 8px rgba(0, 242, 254, 0); }
             100% { transform: scale(0.9); opacity: 0.6; box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
         }
 
-        /* --- MEDIA QUERY KHUSUS LAYAR HP (RESPONSIVE) --- */
+        /* RESPONSIVE HP TWEAKS */
         @media (max-width: 576px) {
-            .cx-glow-orb-1, .cx-glow-orb-2 {
-                width: 200px;
-                height: 200px;
-            }
-            .cx-countdown-grid {
-                gap: 8px;
-                padding: 0 4px;
-            }
-            .cx-timer-block {
-                padding: 12px 4px;
-                border-radius: 10px;
-            }
-            /* Mengubah struktur form kapsul menjadi vertikal rapi di HP */
-            .cx-form-container {
-                border-radius: 16px;
-                padding: 10px;
-                background: rgba(10, 11, 18, 0.85);
-            }
-            .cx-input-box {
-                text-align: center;
-                padding: 12px !important;
-                margin-bottom: 8px;
-                width: 100%;
-            }
-            .cx-action-btn {
-                width: 100%;
-                border-radius: 12px;
-            }
+            .cx-countdown-grid { gap: 6px; }
+            .cx-timer-block { padding: 12px 2px; border-radius: 10px; }
+            .cx-form-container { border-radius: 16px; padding: 10px; }
+            .cx-input-box { text-align: center; padding: 10px !important; margin-bottom: 8px; width: 100%; }
+            .cx-action-btn { width: 100%; border-radius: 10px; }
         }
     </style>
 </head>
 <body class="cx-premium-layout">
 
-    <div class="cx-glow-orb-1"></div>
-    <div class="cx-glow-orb-2"></div>
+    <div class="cx-glow-orb" style="top: -10%; left: -10%;"></div>
 
-    <!-- Particle Background Canvas -->
+    <!-- CANVAS INTERAKTIF UTAMA (Mendeteksi Klik, Gerakan & Sentuhan) -->
     <canvas id="cx-space-canvas"></canvas>
 
     <div class="cx-wrapper-hero">
-        <div class="text-center w-100" style="max-width: 600px;">
+        <div class="cx-interactive-content text-center">
             
             <!-- Badge Status -->
             <div class="cx-status-badge">
@@ -332,15 +294,15 @@
                 <span>Deploying Core Architecture</span>
             </div>
 
-            <!-- Title Coreexis -->
+            <!-- Title -->
             <h1 class="cx-main-title">coreexis<span class="cx-title-dot">.net</span></h1>
             
-            <!-- Description -->
+            <!-- Subtitle -->
             <p class="cx-subtitle">
                 An intelligent, high-velocity SaaS infrastructure tailored to streamline workflow logic. Something monumental is launching.
             </p>
 
-            <!-- Countdown Timer -->
+            <!-- Countdown Grid -->
             <div class="cx-countdown-grid">
                 <div class="cx-timer-block">
                     <span class="cx-num-display" id="cx-days">00</span>
@@ -360,7 +322,7 @@
                 </div>
             </div>
 
-            <!-- Capsule Form terhubung ke coreexis.global@gmail.com -->
+            <!-- Form terhubung ke coreexis.global@gmail.com -->
             <form id="cx-subscription-gateway" class="cx-form-container mx-auto">
                 <div class="row g-0 align-items-center">
                     <div class="col-sm-8">
@@ -375,7 +337,7 @@
                 </div>
             </form>
 
-            <!-- Success Message Box -->
+            <!-- Status Banner -->
             <div id="cx-status-response" class="cx-message-banner"></div>
 
             <!-- Social Links -->
@@ -388,105 +350,122 @@
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // --- 1. HIGH-PERFORMANCE INTERACTIVE CANVAS ---
+        // --- 1. FULLY INTERACTIVE CONSTELATION CANVAS ---
         const canvas = document.getElementById('cx-space-canvas');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 100 };
+        let particlesArray = [];
+        
+        const mouse = { x: null, y: null, radius: 150 };
 
-        function setCanvasSize() {
+        function initCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            init(); // Re-inisialisasi jumlah partikel sesuai ukuran layar terbaru
         }
-        setCanvasSize();
-        window.addEventListener('resize', setCanvasSize);
+        initCanvas();
+        window.addEventListener('resize', initCanvas);
+
+        // Interaksi Gerakan Mouse (PC)
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
         });
-        window.addEventListener('mouseleave', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-        // Dukungan Sentuhan Layar HP (Touch Events)
+        window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+        // Interaksi Klik (PC) & Sentuhan Geser (HP) -> Memancarkan Partikel Baru Langsung!
+        function spawnParticles(x, y) {
+            for (let i = 0; i < 5; i++) {
+                particlesArray.push(new Particle(x, y, true));
+            }
+        }
+        window.addEventListener('click', (e) => { spawnParticles(e.clientX, e.clientY); });
         window.addEventListener('touchmove', (e) => {
-            if(e.touches.length > 0) {
+            if (e.touches.length > 0) {
                 mouse.x = e.touches[0].clientX;
                 mouse.y = e.touches[0].clientY;
+                spawnParticles(e.touches[0].clientX, e.touches[0].clientY);
             }
         });
-        window.addEventListener('touchend', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
+        window.addEventListener('touchend', () => { mouse.x = null; mouse.y = null; });
 
-        class AdvancedParticle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.8 + 0.4;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 25) + 8;
-                this.color = Math.random() > 0.4 ? 'rgba(0, 242, 254, 0.22)' : 'rgba(127, 0, 255, 0.18)';
+        class Particle {
+            constructor(x, y, isSpawned = false) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = isSpawned ? (Math.random() * 2 - 1) : (Math.random() * 0.6 - 0.3);
+                this.speedY = isSpawned ? (Math.random() * 2 - 1) : (Math.random() * 0.6 - 0.3);
+                this.life = isSpawned ? 100 : 1; // Untuk partikel yang meledak saat disentuh
             }
             draw() {
-                ctx.fillStyle = this.color;
+                ctx.fillStyle = `rgba(0, 242, 254, ${this.life / 100})`;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
                 ctx.fill();
             }
             update() {
-                if (mouse.x != null && mouse.y != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.life > 1) this.life -= 1;
+
+                // Batasan Layar
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+        }
+
+        // Buat Partikel Dasar Latar Belakang
+        function populate() {
+            particlesArray = [];
+            let count = Math.min(70, window.innerWidth / 12);
+            for (let i = 0; i < count; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        populate();
+
+        // Hubungkan Garis Antar Partikel Terdekat yang Dekat dengan Mouse (Konstelasi)
+        function connect() {
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
                     let distance = Math.hypot(dx, dy);
-                    if (distance < mouse.radius) {
-                        let force = (mouse.radius - distance) / mouse.radius;
-                        let directionX = dx / distance;
-                        let directionY = dy / distance;
-                        this.x -= directionX * force * this.density * 0.3;
-                        this.y -= directionY * force * this.density * 0.3;
-                    } else {
-                        if (this.x !== this.baseX) this.x -= (this.x - this.baseX) * 0.05;
-                        if (this.y !== this.baseY) this.y -= (this.y - this.baseY) * 0.05;
+
+                    if (distance < 100) {
+                        // Jika dekat mouse, buat garisnya bercahaya neon cyan
+                        let alpha = (1 - (distance / 100)) * 0.15;
+                        ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
                     }
-                } else {
-                    if (this.x !== this.baseX) this.x -= (this.x - this.baseX) * 0.05;
-                    if (this.y !== this.baseY) this.y -= (this.y - this.baseY) * 0.05;
                 }
-                
-                this.baseX += Math.sin(Date.now() * 0.001 + this.density) * 0.04;
-                this.baseY += Math.cos(Date.now() * 0.001 + this.density) * 0.04;
             }
         }
 
-        function init() {
-            particles = [];
-            // Mengurangi beban partikel secara otomatis di layar HP agar performa tetap enteng
-            const count = Math.min(60, window.innerWidth / 12);
-            for(let i=0; i<count; i++) {
-                particles.push(new AdvancedParticle());
-            }
-        }
-
-        function renderLoop() {
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(renderLoop);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                if (particlesArray[i].life <= 1) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+            connect();
+            requestAnimationFrame(animate);
         }
-        renderLoop();
+        animate();
 
-        // --- 2. LOGIKA HITUNG MUNDUR (COUNTDOWN) ---
+
+        // --- 2. COUNTDOWN TIMER ---
         const targetedLaunchDate = new Date();
         targetedLaunchDate.setDate(targetedLaunchDate.getDate() + 18);
 
@@ -507,7 +486,8 @@
         setInterval(computeTimer, 1000);
         computeTimer();
 
-        // --- 3. PENGIRIMAN EMAIL OTOMATIS KE coreexis.global@gmail.com VIA API ---
+
+        // --- 3. AJAX EMAIL ROUTING KE coreexis.global@gmail.com ---
         const subscriptionForm = document.getElementById('cx-subscription-gateway');
         const statusResponse = document.getElementById('cx-status-response');
         const submitBtn = document.getElementById('cx-submit-trigger');
@@ -521,24 +501,17 @@
 
             fetch('https://formsubmit.co/ajax/coreexis.global@gmail.com', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    Email_Registered: targetEmail,
-                    Platform: 'Coreexis.net Mobile-PreLaunch'
-                })
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ Email_Registered: targetEmail, Platform: 'Coreexis.net Launch Platform' })
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(() => {
                 statusResponse.className = "cx-message-banner text-success active";
-                statusResponse.innerHTML = `<i class="fa-regular fa-circle-check me-2"></i> Access granted! Email listed in queue.`;
+                statusResponse.innerHTML = `<i class="fa-regular fa-circle-check me-2"></i> Early access requested. Email routed successfully.`;
                 document.getElementById('cx-subscriber-email').value = '';
             })
-            .catch(error => {
+            .catch(() => {
                 statusResponse.className = "cx-message-banner text-success active";
-                statusResponse.innerHTML = `<i class="fa-regular fa-circle-check me-2"></i> Access granted! Email listed in queue.`;
+                statusResponse.innerHTML = `<i class="fa-regular fa-circle-check me-2"></i> Early access requested. Email routed successfully.`;
                 document.getElementById('cx-subscriber-email').value = '';
             })
             .finally(() => {
