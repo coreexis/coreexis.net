@@ -1,1 +1,405 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coreexis - Something Powerful is Coming</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome untuk Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+  <style>
+    /* Reset & Base Variables */
+:root {
+    --cx-bg-dark: #0a0b10;
+    --cx-card-bg: rgba(255, 255, 255, 0.03);
+    --cx-border-color: rgba(255, 255, 255, 0.08);
+    --cx-neon-cyan: #00f2fe;
+    --cx-neon-purple: #4facfe;
+    --cx-text-muted: #8a8f98;
+}
+
+body.cx-body-wrapper {
+    background-color: var(--cx-bg-dark);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #ffffff;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* Canvas Latar Belakang */
+#cx-particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Container Utama */
+.cx-main-container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Badge Glow */
+.cx-badge-glow {
+    background: rgba(0, 242, 254, 0.1);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--cx-neon-cyan);
+    animation: cxFloat 4s ease-in-out infinite;
+}
+
+.cx-pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--cx-neon-cyan);
+    border-radius: 50%;
+    margin-right: 6px;
+    box-shadow: 0 0 10px var(--cx-neon-cyan);
+    animation: cxPulse 1.5s infinite;
+}
+
+/* Typography */
+.cx-brand-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #ffffff 30%, var(--cx-text-muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cx-dot {
+    background: linear-gradient(135deg, var(--cx-neon-cyan), var(--cx-neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cx-lead-text {
+    font-size: 1.15rem;
+    font-weight: 400;
+}
+
+/* Countdown Cards */
+.cx-countdown-card {
+    background: var(--cx-card-bg);
+    border: 1px solid var(--cx-border-color);
+    padding: 12px 6px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.cx-countdown-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 242, 254, 0.3);
+}
+
+.cx-time-num {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.cx-time-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--cx-text-muted);
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+/* Form Area */
+.cx-subscribe-area {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--cx-border-color);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.cx-input-field {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--cx-border-color);
+    color: #ffffff !important;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.cx-input-field:focus {
+    background: rgba(0, 0, 0, 0.4);
+    border-color: var(--cx-neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+}
+
+.cx-btn-primary {
+    background: linear-gradient(135deg, var(--cx-neon-cyan), var(--cx-neon-purple));
+    border: none;
+    color: #0a0b10;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.cx-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 242, 254, 0.4);
+    color: #0a0b10;
+}
+
+/* Social Icons */
+.cx-social-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--cx-card-bg);
+    border: 1px solid var(--cx-border-color);
+    color: var(--cx-text-muted);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cx-social-icon:hover {
+    color: var(--cx-neon-cyan);
+    border-color: var(--cx-neon-cyan);
+    transform: scale(1.1);
+}
+
+/* Keyframe Animations */
+@keyframes cxFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes cxPulse {
+    0% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(0, 242, 254, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
+}
+
+/* Responsive Tweak */
+@media (min-width: 576px) {
+    .cx-time-num { font-size: 2rem; }
+    .cx-time-label { font-size: 0.75rem; }
+}
+  </style>
+<body class="cx-body-wrapper">
+
+    <!-- Efek Partikel Latar Belakang (Canvas) -->
+    <canvas id="cx-particle-canvas"></canvas>
+
+    <!-- Konten Utama -->
+    <main class="container cx-main-container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="row justify-content-center w-100">
+            <div class="col-10 col-md-8 col-lg-6 text-center position-relative">
+                
+                <!-- Badge Animasi -->
+                <div class="cx-badge-glow mb-4 d-inline-block">
+                    <span class="cx-pulse-dot"></span> Next-Gen SaaS Platform
+                </div>
+
+                <!-- Logo / Brand -->
+                <h1 class="cx-brand-title mb-3">coreexis<span class="cx-dot">.net</span></h1>
+                
+                <!-- Teks Interaktif / Animasi -->
+                <p class="cx-lead-text mb-5 text-muted">
+                    We are building the ultimate ecosystem to <span class="cx-typewriter">optimize your workflow.</span>
+                </p>
+
+                <!-- Countdown Timer -->
+                <div class="row g-3 justify-content-center mb-5" id="cx-countdown-box">
+                    <div class="col-3 col-sm-2">
+                        <div class="cx-countdown-card">
+                            <span class="cx-time-num" id="cx-days">00</span>
+                            <span class="cx-time-label">Days</span>
+                        </div>
+                    </div>
+                    <div class="col-3 col-sm-2">
+                        <div class="cx-countdown-card">
+                            <span class="cx-time-num" id="cx-hours">00</span>
+                            <span class="cx-time-label">Hours</span>
+                        </div>
+                    </div>
+                    <div class="col-3 col-sm-2">
+                        <div class="cx-countdown-card">
+                            <span class="cx-time-num" id="cx-mins">00</span>
+                            <span class="cx-time-label">Mins</span>
+                        </div>
+                    </div>
+                    <div class="col-3 col-sm-2">
+                        <div class="cx-countdown-card">
+                            <span class="cx-time-num" id="cx-secs">00</span>
+                            <span class="cx-time-label">Secs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Berlangganan (Subscribe Form) -->
+                <div class="cx-subscribe-area p-4 rounded-4 mb-4">
+                    <h5 class="text-white mb-3 fs-6 fw-semibold text-start">Get notified when we launch:</h5>
+                    <form id="cx-subscribe-form" class="row g-2">
+                        <div class="col-sm-8">
+                            <input type="email" class="form-control cx-input-field" placeholder="Enter your business email" required id="cx-email-input">
+                        </div>
+                        <div class="col-sm-4 d-grid">
+                            <button type="submit" class="btn cx-btn-primary">
+                                <span class="cx-btn-text">Notify Me</span>
+                                <i class="fas fa-arrow-right ms-2 cx-btn-icon"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <!-- Pesan Feedback Form -->
+                    <p id="cx-form-message" class="mt-3 mb-0 text-start d-none"></p>
+                </div>
+
+                <!-- Sosial Media -->
+                <div class="cx-social-links d-flex justify-content-center gap-3">
+                    <a href="#" class="cx-social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="cx-social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="cx-social-icon" title="GitHub"><i class="fab fa-github"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+      // 1. Efek Latar Belakang Partikel (Interactive Canvas)
+const canvas = document.getElementById('cx-particle-canvas');
+const ctx = canvas.getContext('2d');
+
+let particlesArray = [];
+const numberOfParticles = 60;
+
+// Resize canvas agar sesuai ukuran window
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+// Cetak Object Partikel
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 0.5 - 0.25;
+        this.speedY = Math.random() * 0.5 - 0.25;
+        this.color = Math.random() > 0.5 ? 'rgba(0, 242, 254, 0.3)' : 'rgba(79, 172, 254, 0.2)';
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+    }
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+    }
+    requestAnimationFrame(animateParticles);
+}
+
+initParticles();
+animateParticles();
+
+
+// 2. Countdown Timer Logic
+// Set tanggal target launching (Misal: 30 hari ke depan)
+const launchDate = new Date();
+launchDate.setDate(launchDate.getDate() + 30); 
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const difference = launchDate - now;
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    document.getElementById('cx-days').innerText = days < 10 ? '0' + days : days;
+    document.getElementById('cx-hours').innerText = hours < 10 ? '0' + hours : hours;
+    document.getElementById('cx-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+    document.getElementById('cx-secs').innerText = seconds < 10 ? '0' + seconds : seconds;
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+
+// 3. Interaktivitas Form Subscribe (Simulasi AJAX)
+document.getElementById('cx-subscribe-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const emailInput = document.getElementById('cx-email-input');
+    const messageBox = document.getElementById('cx-form-message');
+    const submitBtn = this.querySelector('.cx-btn-primary');
+    
+    // Animasi tombol saat loading singkat
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+        // Tampilkan feedback sukses
+        messageBox.classList.remove('d-none', 'text-danger');
+        messageBox.classList.add('text-success');
+        messageBox.innerHTML = '<i class="fas fa-check-circle me-1"></i> Awesome! We will save a spot for you.';
+        
+        // Reset Form
+        emailInput.value = '';
+        submitBtn.innerHTML = '<span class="cx-btn-text">Notify Me</span> <i class="fas fa-arrow-right ms-2 cx-btn-icon"></i>';
+        submitBtn.disabled = false;
+    }, 1200);
+});
+    </script>
+</body>
+</html>
