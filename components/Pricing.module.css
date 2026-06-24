@@ -1,0 +1,153 @@
+.section {
+  padding: 80px 40px;
+  background: #0d0d18;
+}
+
+.eyebrow {
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 48px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+}
+
+.card.featured {
+  border: 1.5px solid var(--accent);
+  background: var(--bg-elevated);
+}
+
+.popularBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  padding: 4px 14px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.tierName {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.period {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.tierDesc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 10px 0 20px;
+}
+
+.featureList {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.featureOn,
+.featureOff {
+  font-size: 13px;
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.featureOn {
+  color: var(--text-secondary);
+}
+
+.featureOn svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.featureOff {
+  color: #333350;
+}
+
+.featureOff svg {
+  color: #333350;
+  flex-shrink: 0;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 0.5px solid var(--border-muted);
+  background: transparent;
+  color: var(--text-primary);
+  text-align: center;
+  transition: opacity 0.15s;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btnPrimary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 380px;
+  }
+  .section {
+    padding: 60px 20px;
+  }
+}
