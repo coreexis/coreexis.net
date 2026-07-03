@@ -1,0 +1,100 @@
+.coreexis-landing {
+  --cx-bg: #0a0b0d;
+  --cx-bg-elevated: #131519;
+  --cx-bg-card: #16181d;
+  --cx-text: #f2f1ed;
+  --cx-text-muted: #8b8d93;
+  --cx-text-dim: #55575e;
+  --cx-accent: #ff5a1f;
+  --cx-accent-soft: #ffb088;
+  --cx-accent-dim: rgba(255, 90, 31, 0.14);
+  --cx-line: #212328;
+  --cx-line-soft: #1a1c21;
+
+  background-color: var(--cx-bg);
+  color: var(--cx-text);
+  isolation: isolate;
+}
+
+.coreexis-landing * {
+  box-sizing: border-box;
+}
+
+.coreexis-landing .cx-cta-glow {
+  position: relative;
+  box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.4), 0 0 24px 4px rgba(255, 90, 31, 0.25);
+  animation: cx-pulse 2.4s ease-in-out infinite;
+}
+
+.coreexis-landing .cx-cta-glow:hover {
+  animation-play-state: paused;
+  box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.7), 0 0 32px 8px rgba(255, 90, 31, 0.4);
+}
+
+@keyframes cx-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.4), 0 0 20px 2px rgba(255, 90, 31, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.65), 0 0 34px 10px rgba(255, 90, 31, 0.38);
+  }
+}
+
+.coreexis-landing .cx-live-dot {
+  animation: cx-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes cx-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.coreexis-landing .cx-ticker-row {
+  animation: cx-rowIn 0.4s ease-out;
+}
+
+@keyframes cx-rowIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.coreexis-landing .cx-grid-bg {
+  background-image:
+    linear-gradient(to right, var(--cx-line-soft) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--cx-line-soft) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coreexis-landing .cx-cta-glow,
+  .coreexis-landing .cx-live-dot,
+  .coreexis-landing .cx-ticker-row,
+  .coreexis-landing .cx-orb {
+    animation: none !important;
+  }
+}
+
+/* Ambient glow orbs behind the hero — pure CSS, cheap to render ---------- */
+.coreexis-landing .cx-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.28;
+  pointer-events: none;
+  animation: cx-float 9s ease-in-out infinite;
+}
+
+@keyframes cx-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(14px, -18px) scale(1.06); }
+}
+
+/* Pricing card hover lift -------------------------------------------------- */
+.coreexis-landing .cx-hover-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.coreexis-landing .cx-hover-lift:hover {
+  transform: translateY(-4px);
+}
